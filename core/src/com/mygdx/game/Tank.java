@@ -17,22 +17,6 @@ public class Tank {
     private final Projectile projectile;
     private final float scale;
 
-//    private final float X_REAR_LEFT_CORNER = x - tankHeight * MathUtils.sin(angle);
-//    private final float Y_REAR_LEFT_CORNER = y + tankHeight * MathUtils.cos(angle);
-//    private final float X_REAR_RIGHT_CORNER = x;
-//    private final float Y_REAR_RIGHT_CORNER = y;
-//    private final float X_FRONT_LEFT_CORNER = x + tankLength * MathUtils.cos(angle);
-//    private final float Y_FRONT_LEFT_CORNER = y + tankLength * MathUtils.sin(angle);
-//    private final float X_FRONT_RIGHT_CORNER = x + tankLength * MathUtils.cos(angle) -
-//            tankHeight * MathUtils.sin(angle);
-//    private final float Y_FRONT_RIGHT_CORNER = y + tankLength * MathUtils.sin(angle) +
-//            tankHeight * MathUtils.cos(angle);
-//
-//    private final float[] xCornerCoordinates = {X_REAR_LEFT_CORNER, X_REAR_RIGHT_CORNER,
-//            X_FRONT_LEFT_CORNER, X_FRONT_RIGHT_CORNER};
-//    private final float[] yCornerCoordinates = {Y_REAR_LEFT_CORNER, Y_REAR_RIGHT_CORNER,
-//            Y_FRONT_LEFT_CORNER, Y_FRONT_RIGHT_CORNER};
-
     public Tank() {
         this.texture = new Texture("tank.png");
         this.textureWeapon = new Texture("weapon.png");
