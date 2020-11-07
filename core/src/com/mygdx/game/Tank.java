@@ -7,6 +7,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 
 public class Tank {
+    private final float tankLength = 40.0f;
+    private final float tankHeight = 40.0f;
+
     private final Texture texture;
     private final Texture textureWeapon;
     private float x;
@@ -34,6 +37,15 @@ public class Tank {
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             angle += 90.0f * dt;
         }
+
+        float[] REAR_RIGHT_CORNER_COORDINATES = {x, y};
+        float[] REAR_LEFT_CORNER_COORDINATES = {x - tankHeight * MathUtils.sinDeg(angle),
+                y + tankLength * MathUtils.cosDeg(angle)};
+        float[] FRONT_RIGHT_CORNER_COORDINATES = {x + tankLength * MathUtils.cosDeg(angle),
+                y + tankLength * MathUtils.sinDeg(angle)};
+        float[] FRONT_LEFT_CORNER_COORDINATES = {x + tankLength * MathUtils.cosDeg(angle) -
+                tankHeight * MathUtils.sinDeg(angle), y + tankLength * MathUtils.sinDeg(angle) +
+                tankLength * MathUtils.cosDeg(angle)};
 //        if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
 //            angle -= 90.0f;
 //        }
@@ -55,7 +67,8 @@ public class Tank {
             angleWeapon += 90.0f * dt;
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !projectile.isActive()) {
-            projectile.shoot(x + 16 * scale * MathUtils.cosDeg(angle), y + 16* scale * MathUtils.sinDeg(angle), angle + angleWeapon);
+            projectile.shoot(x + 16 * scale * MathUtils.cosDeg(angle + angleWeapon),
+                    y + 16 * scale * MathUtils.sinDeg(angle + angleWeapon), angle + angleWeapon);
         }
         if (projectile.isActive()) {
             projectile.update(dt);
@@ -63,8 +76,10 @@ public class Tank {
     }
 
     public void render(SpriteBatch batch) {
-        batch.draw(texture, x - 20, y - 20, 20, 20, 40, 40, scale, scale, angle, 0, 0, 40, 40, false, false);
-        batch.draw(textureWeapon, x - 20, y - 20, 20, 20, 40, 40, scale, scale, angle + angleWeapon, 0, 0, 40, 40, false, false);
+        batch.draw(texture, x - tankLength / 2, y - tankHeight / 2, tankLength / 2, tankHeight / 2,
+                tankLength, tankHeight, scale, scale, angle, 0, 0, 40, 40, false, false);
+        batch.draw(textureWeapon, x - tankLength / 2, y - tankHeight / 2, tankLength / 2, tankHeight / 2,
+                tankLength, tankHeight, scale, scale, angle + angleWeapon, 0, 0, 40, 40, false, false);
         if (projectile.isActive()) {
             projectile.render(batch);
         }
