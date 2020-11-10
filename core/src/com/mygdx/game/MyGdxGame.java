@@ -32,10 +32,10 @@ public class MyGdxGame extends ApplicationAdapter {
 
     public void update(float dt) {
         tank.update(dt);
-//        if (Gdx.input.justTouched()) {
-//            System.out.println(Gdx.input.getX());
-//            System.out.println(Gdx.graphics.getHeight() - Gdx.input.getY());
-//        }
+        if (Gdx.input.justTouched()) {
+            System.out.println(Gdx.input.getX());
+            System.out.println(Gdx.graphics.getHeight() - Gdx.input.getY());
+        }
     }
 
     @Override

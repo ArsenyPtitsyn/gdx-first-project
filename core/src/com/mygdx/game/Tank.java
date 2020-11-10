@@ -45,61 +45,65 @@ public class Tank {
         // 1) Найдём координаты краёв танка в следующий момент времени при нажатии на ту или иную кнопку
         // управления:
         // а) Координаты передних краёв при движении танка вперёд.
-        float wXFrontLeftCornerCoordinate = x + tankSpeed * MathUtils.cosDeg(angle) * dt +
-                tankLength / 2 * MathUtils.cosDeg(angle) - tankHeight / 2 * MathUtils.sinDeg(angle);
-        float wYFrontLeftCornerCoordinate = y + tankSpeed * MathUtils.sinDeg(angle) * dt +
-                tankLength / 2 * MathUtils.sinDeg(angle) + tankHeight / 2 * MathUtils.cosDeg(angle);
-        float wXFrontRightCornerCoordinate = x + tankSpeed * MathUtils.cosDeg(angle) * dt +
-                tankLength / 2 * MathUtils.cosDeg(angle) + tankHeight / 2 * MathUtils.sinDeg(angle);
-        float wYFrontRightCornerCoordinate = y + tankSpeed * MathUtils.sinDeg(angle) * dt +
-                tankLength / 2 * MathUtils.sinDeg(angle) - tankHeight / 2 * MathUtils.cosDeg(angle);
+        float wXFrontLeftCornerCoordinate = x + tankSpeed * MathUtils.cosDeg(angle) * dt + scale *
+                (tankLength / 2 * MathUtils.cosDeg(angle) - tankHeight / 2 * MathUtils.sinDeg(angle));
+        float wYFrontLeftCornerCoordinate = y + tankSpeed * MathUtils.sinDeg(angle) * dt + scale *
+                (tankLength / 2 * MathUtils.sinDeg(angle) + tankHeight / 2 * MathUtils.cosDeg(angle));
+        float wXFrontRightCornerCoordinate = x + tankSpeed * MathUtils.cosDeg(angle) * dt + scale *
+                (tankLength / 2 * MathUtils.cosDeg(angle) + tankHeight / 2 * MathUtils.sinDeg(angle));
+        float wYFrontRightCornerCoordinate = y + tankSpeed * MathUtils.sinDeg(angle) * dt + scale *
+                (tankLength / 2 * MathUtils.sinDeg(angle) - tankHeight / 2 * MathUtils.cosDeg(angle));
         // б) Координаты задних краёв при движении танка назад.
-        float sXRearLeftCornerCoordinate = x - reverseTankSpeed * MathUtils.cosDeg(angle) * dt -
-                tankHeight / 2 * MathUtils.sinDeg(angle) - tankLength / 2 * MathUtils.cosDeg(angle);
-        float sYRearLeftCornerCoordinate = y - reverseTankSpeed * MathUtils.sinDeg(angle) * dt +
-                tankHeight / 2 * MathUtils.cosDeg(angle) - tankLength / 2 * MathUtils.sinDeg(angle);
-        float sXRearRightCornerCoordinate = x - reverseTankSpeed * MathUtils.cosDeg(angle) * dt -
-                tankLength / 2 * MathUtils.cosDeg(angle) + tankHeight / 2 * MathUtils.sinDeg(angle);
-        float sYRearRightCornerCoordinate = y - reverseTankSpeed * MathUtils.sinDeg(angle) * dt -
-                tankLength / 2 * MathUtils.sinDeg(angle) - tankHeight / 2 * MathUtils.cosDeg(angle);
+        float sXRearLeftCornerCoordinate = x - reverseTankSpeed * MathUtils.cosDeg(angle) * dt - scale *
+                (tankHeight / 2 * MathUtils.sinDeg(angle) + tankLength / 2 * MathUtils.cosDeg(angle));
+        float sYRearLeftCornerCoordinate = y - reverseTankSpeed * MathUtils.sinDeg(angle) * dt + scale *
+                (tankHeight / 2 * MathUtils.cosDeg(angle) - tankLength / 2 * MathUtils.sinDeg(angle));
+        float sXRearRightCornerCoordinate = x - reverseTankSpeed * MathUtils.cosDeg(angle) * dt - scale *
+                (tankLength / 2 * MathUtils.cosDeg(angle) - tankHeight / 2 * MathUtils.sinDeg(angle));
+        float sYRearRightCornerCoordinate = y - reverseTankSpeed * MathUtils.sinDeg(angle) * dt - scale *
+                (tankLength / 2 * MathUtils.sinDeg(angle) + tankHeight / 2 * MathUtils.cosDeg(angle));
         // в) Координаты всех краёв при повороте танка по часовой стрелки.
         // вспомогательные величины.
         float stepAngle = tankAngularSpeed * dt; // угол поворота за время dt при обычной угловой скорости.
-        float semi = (float) Math.sqrt((tankLength / 2) * (tankLength / 2) +
+        float semidiagonal = (float) Math.sqrt((tankLength / 2) * (tankLength / 2) +
                 (tankHeight / 2) * (tankHeight / 2)); // полудиагональ танка.
-        float diagonalAngle = (float) Math.acos(tankLength / (2 * semi));
-        float dXFrontLeftCornerCoordinate = x + semi *
+        float diagonalAngle = (float) Math.acos(tankLength / (2 * semidiagonal));
+
+        // Собственно координаты.
+        float dXFrontLeftCornerCoordinate = x + scale * semidiagonal *
                 MathUtils.cosDeg(angle + diagonalAngle - stepAngle);
-        float dYFrontLeftCornerCoordinate = y + semi *
+        float dYFrontLeftCornerCoordinate = y + scale * semidiagonal *
                 MathUtils.sinDeg(angle + diagonalAngle - stepAngle);
-        float dXFrontRightCornerCoordinate = x + semi *
+        float dXFrontRightCornerCoordinate = x + scale * semidiagonal *
                 MathUtils.cosDeg(angle - diagonalAngle - stepAngle);
-        float dYFrontRightCornerCoordinate = y + semi *
+
+        float dYFrontRightCornerCoordinate = y + scale * semidiagonal *
                 MathUtils.sinDeg(angle - diagonalAngle - stepAngle);
-        float dXRearLeftCornerCoordinate = x - semi *
+        float dXRearLeftCornerCoordinate = x - scale * semidiagonal *
                 MathUtils.cosDeg(angle - diagonalAngle - stepAngle);
-        float dYRearLeftCornerCoordinate = y - semi *
+        float dYRearLeftCornerCoordinate = y - scale * semidiagonal *
                 MathUtils.sinDeg(angle - diagonalAngle - stepAngle);
-        float dXRearRightCornerCoordinate = x - semi *
+        float dXRearRightCornerCoordinate = x - scale * semidiagonal *
                 MathUtils.cosDeg(angle + diagonalAngle - stepAngle);
-        float dYRearRightCornerCoordinate = y - semi *
+        float dYRearRightCornerCoordinate = y - scale * semidiagonal *
                 MathUtils.sinDeg(angle + diagonalAngle - stepAngle);
+
         // г) Координаты всех краёв при повороте танка против часовой стрелки.
-        float aXFrontLeftCornerCoordinate = x + semi *
+        float aXFrontLeftCornerCoordinate = x + scale * semidiagonal *
                 MathUtils.cosDeg(angle + diagonalAngle + stepAngle);
-        float aYFrontLeftCornerCoordinate = y + semi *
+        float aYFrontLeftCornerCoordinate = y + scale * semidiagonal *
                 MathUtils.sinDeg(angle + diagonalAngle + stepAngle);
-        float aXFrontRightCornerCoordinate = x + semi *
+        float aXFrontRightCornerCoordinate = x + scale * semidiagonal *
                 MathUtils.cosDeg(angle - diagonalAngle + stepAngle);
-        float aYFrontRightCornerCoordinate = y + semi *
+        float aYFrontRightCornerCoordinate = y + scale * semidiagonal *
                 MathUtils.sinDeg(angle - diagonalAngle + stepAngle);
-        float aXRearLeftCornerCoordinate = x - semi *
+        float aXRearLeftCornerCoordinate = x - scale * semidiagonal *
                 MathUtils.cosDeg(angle - diagonalAngle + stepAngle);
-        float aYRearLeftCornerCoordinate = y - semi *
+        float aYRearLeftCornerCoordinate = y - scale * semidiagonal *
                 MathUtils.sinDeg(angle - diagonalAngle + stepAngle);
-        float aXRearRightCornerCoordinate = x - semi *
+        float aXRearRightCornerCoordinate = x - scale * semidiagonal *
                 MathUtils.cosDeg(angle + diagonalAngle + stepAngle);
-        float aYRearRightCornerCoordinate = y - semi *
+        float aYRearRightCornerCoordinate = y - scale * semidiagonal *
                 MathUtils.sinDeg(angle + diagonalAngle + stepAngle);
         // 2) Если танк при следующей зарисовке выезжает за пределы экрана - останавливаем его, иначе
         // оставляем скорость первоначальной.
@@ -181,7 +185,8 @@ public class Tank {
 
     public void render(SpriteBatch batch) {
         batch.draw(texture, x - tankLength / 2, y - tankHeight / 2, tankLength / 2, tankHeight / 2,
-                tankLength, tankHeight, scale, scale, angle, 0, 0, 40, 40, false, false);
+                tankLength, tankHeight, scale, scale, angle, 0, 0, texture.getWidth(), texture.getHeight(),
+                false, false);
         batch.draw(textureWeapon, x - tankLength / 2, y - tankHeight / 2, tankLength / 2, tankHeight / 2,
                 tankLength, tankHeight, scale, scale, angle + angleWeapon, 0, 0, 40, 40, false, false);
         if (projectile.isActive()) {
